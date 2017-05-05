@@ -1,0 +1,89 @@
+<!doctype html>
+<html ng-app="myKeysightApp" >
+<head>
+  <meta charset="utf-8">
+  <title>KEYSIGHT DEMO</title>
+ 
+  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+      <script data-require="angular.js@1.2.x" src="http://code.angularjs.org/1.2.5/angular.js" data-semver="1.2.5"></script>
+	  
+	
+	  
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.min.css" rel="stylesheet"> 
+  <script src="angular-ui.js"></script>
+  <script src="angular-dragdrop.js"></script>
+   <link rel="stylesheet" href="style.css">
+  <script src="app.js"></script>
+</head>
+<body>
+ <div ng-controller="MainCtrl">
+ <div class="divider-spacer"></div>
+	<img src="keysight-logo.png" alt="keysight" height="142" width="142">
+ <div class="divider-spacer"></div>	
+<div id="item-wrapper" class="btn-droppable item-container" data-drop="true" ng-model='moduleData' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=moduleData])'}" jqyoui-droppable="{multiple:true, onDrop: 'onDeactivate({{currentItem}})'}">
+	<div class="module-min" ng-repeat="(itemIndex, item) in moduleData" ng-show="item.active == 'Y'" data-drag="true" data-jqyoui-options="moduleListOptions" ng-model="moduleData" jqyoui-draggable="{index: {{$index}},animate:true, onStart: 'startDrag({{item}})',onStop: 'stopDrag({{item}})'}">{{item.title}}
+		<div class="title" >{{item.name}}</div>
+		<div class="color-strip" ng-style="{'background-color': item.color}"></div>
+	</div>
+	<div class="clr"></div><br/>
+	<div class="divider-spacer"></div>
+</div>
+    
+
+	
+<div class="item-assemble"  data-drop="true" ng-model='activatedModules' data-jqyoui-options="{accept:'.module-min:not([ng-model=activatedModules])'}"  jqyoui-droppable="{multiple:true, onDrop: 'onActivate({{currentItem}})'}" ui-sortable>
+ 	<div class="caption">
+	<div class="instruction" ng-show="activatedModules.length == 0">
+	<div class="centered">Drag a form to this area to begin</div>
+	</div>
+	
+	<h2  >Answer:{{funcanswer}}</h2>
+	
+	<div class="divider-spacer"></div>
+	
+		
+  <div class="btn btn-info btn-draggable" ng-repeat="(itemIndex, item) in activatedModules" ng-show="item.name" data-drag="{{item.active=='Y'}}" data-jqyoui-options="{revert: 'invalid'}" ng-model="activatedModules" jqyoui-draggable="{index: {{$index}},animate:true,onStart: 'startDragBack({{item}})'}">
+    <div class="form" >
+      <div class="form-header" >
+          <div id="min-max" ng-click="toggleShow(item)" class="expanded" ng-style="{'background-color': item.color}"></div>
+          <div class="order-no" ng-style="{'background-color': item.color}">{{item.order}}</div>
+          <div class="form-name">{{item.name}}</div>
+          <div class="oth"><div class="sort"></div><div class="grid-line"></div><div class="pointer"></div> </div>
+      </div>
+	  <div class="divider-spacer"></div>
+	  
+    <div class="mod-form" ng-show="item.show">
+      
+	   <div ng-repeat="parameters in item.fields track by $index">
+	 
+	  <div>
+	  Input Box:
+	  <input 
+	  ng-model="values['field_' + item.name+$index]"  type="text" name="ParamName" value="ParamValue" >
+	  
+	  <div class="divider-spacer"></div>
+	  
+	  </div>
+
+	  
+	  </div>
+	  <div><button ng-click="theTest( {name:item.name ,values:values  ,inputtype:'text',inputamount:2,action:'calculate'}
+	  ).answer">Click for Answer</button></div>
+	  
+	  <div >
+	 <span >
+	 
+	  
+	  </span>
+	  </div>
+	  
+    </div>
+	
+  </div> 
+</div>		
+</div>
+</div>
+</body>
+</html>
